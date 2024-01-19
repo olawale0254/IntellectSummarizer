@@ -1,11 +1,11 @@
 import streamlit as st
 import os
 import tempfile
-from src.pytesseract_ocr import PDFToTextConverter 
+from src.pytesseract_ocr import PDFToTextConverter
 from src.summarizer import TextSummarizer
 
 # Initialize the summarizer
-# summarizer = TextSummarizer()
+summarizer = TextSummarizer()
 
 # Custom CSS for styling
 st.markdown("""
@@ -52,12 +52,11 @@ def process_pdf(file_path):
 
 # Main container
 with st.container():
-    st.write("## Summary Output")
+    st.write("## INTELLECTSUMMARIZER")
     st.markdown("""
 This tool allows you to extract and summarize text from PDF documents or directly from your input. 
 Choose your preferred method and get concise summaries quickly and efficiently.
 """)
-    output_container = st.empty()
 
     # Handle PDF upload
     if option == "Upload PDF":
@@ -74,11 +73,11 @@ Choose your preferred method and get concise summaries quickly and efficiently.
                     os.remove(tmp.name)
 
                     if extracted_text:
-                        # summarized_text = summarizer.summarize(extracted_text)
-                        output_container.markdown("### Extracted Text:")
-                        output_container.write(extracted_text)
-                        output_container.markdown("### Summarized Text:")
-                        # output_container.write(summarized_text)
+                        summarized_text = summarizer.summarize(extracted_text)
+                        st.markdown("### Original Text:")
+                        st.text_area("Extracted Text:", value=extracted_text, height=150, disabled=True)
+                        st.markdown("### Summarized Text:")
+                        st.text_area("Summary:", value=summarized_text, height=100, disabled=True)
                     else:
                         st.error("No text extracted from PDF.")
             else:
@@ -91,10 +90,9 @@ Choose your preferred method and get concise summaries quickly and efficiently.
 
         if st.button('Summarize Text'):
             if user_input_text:
-                # summarized_text = summarizer.summarize(user_input_text)
-                output_container.markdown("### Original Text:")
-                output_container.write(user_input_text)
-                output_container.markdown("### Summarized Text:")
-                # output_container.write(summarized_text)
+                summarized_text = summarizer.summarize(user_input_text)
+                # print(summarized_text)
+                st.markdown("### Summarized Text:")
+                st.text_area("Summary:", value=summarized_text, height=100, disabled=True)
             else:
                 st.error("Please enter some text to process.")

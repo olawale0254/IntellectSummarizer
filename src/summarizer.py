@@ -11,7 +11,7 @@ class TextSummarizer:
         self.model_name = model_name
         self.summarizer = pipeline("summarization", model=self.model_name)
 
-    def summarize(self, text, max_length=50, min_length=5):
+    def summarize(self, text, max_length=10000, min_length=5):
         """
         Summarize the given text using the loaded model.
 
